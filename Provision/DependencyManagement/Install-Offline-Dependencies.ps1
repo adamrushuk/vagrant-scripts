@@ -21,12 +21,12 @@ if (-not (Get-PackageProvider | Where-Object Name -eq 'NuGet')) {
         # NuGet DLL
         $nugetDllDestinationPath = Join-Path -Path $env:ProgramFiles -ChildPath 'PackageManagement\ProviderAssemblies\nuget'
         New-Item -Path $nugetDllDestinationPath -ItemType 'Directory' -Force
-        Copy-Item -Path 'C:\vagrant\Vagrant\provision\all\nuget\dll\*' -Destination $nugetDllDestinationPath -Recurse -Force
+        Copy-Item -Path 'C:\vagrant\Vagrant\Provision\DependencyManagement\nuget\dll\*' -Destination $nugetDllDestinationPath -Recurse -Force
 
         # NuGet EXE
         $nugetExeDestinationPath = Join-Path -Path $env:ProgramData -ChildPath 'Microsoft\Windows\PowerShell\PowerShellGet'
         New-Item -Path $nugetExeDestinationPath -ItemType 'Directory' -Force
-        Copy-Item -Path 'C:\vagrant\Vagrant\provision\all\nuget\nuget.exe' -Destination $nugetExeDestinationPath -Recurse -Force
+        Copy-Item -Path 'C:\vagrant\Vagrant\Provision\DependencyManagement\nuget\nuget.exe' -Destination $nugetExeDestinationPath -Recurse -Force
     }
     catch {
         Write-Error "ERROR: $taskDescriptionNuget..." -ErrorAction 'Continue'
