@@ -13,7 +13,7 @@ Set-NetFirewallRule -Name 'RemoteEventLogSvc*' -Enabled 'True'
 
 # Fix: restart Network Location Awareness service if Windows Firewall showing "Public" instead of "Domain"
 # Also delay WinRM
-$serviceNames = 'NlaSvc', 'WinRM'
+$serviceNames = 'NlaSvc'
 foreach ($serviceName in $serviceNames) {
     Invoke-Expression "sc.exe config $serviceName start=delayed-auto"
     Get-Service -Name $serviceName | Restart-Service -Force
