@@ -27,5 +27,5 @@ If this source repository (`adamrushuk/vagrant-scripts`) is updated, you can pul
 
 ## Reference
 
-https://gist.github.com/gitaarik/8735255
+https://gist.github.com/gitaarik/8735255  
 https://stackoverflow.com/questions/5828324/update-git-submodule-to-latest-commit-on-origin/5828396#5828396
