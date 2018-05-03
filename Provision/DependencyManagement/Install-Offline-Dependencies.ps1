@@ -14,10 +14,12 @@ $credential = New-Object -TypeName 'PSCredential' -ArgumentList ($RepoUsername, 
 # Setup Nuget without an Internet Connection:
 # https://docs.microsoft.com/en-us/powershell/gallery/psget/repository/bootstrapping_nuget_proivder_and_exe#manually-bootstrapping-nugetexe-to-support-publish-operations-on-a-machine-that-is-not-connected-to-the-internet
 Write-Host "CHECKING: NuGet PackageProvider is installed..."
-if (-not (Get-PackageProvider | Where-Object Name -eq 'NuGet')) {
+if (-not (Get-PackageProvider | Where-Object Name -eq 'NuGet'))
+{
     $taskDescriptionNuget = "Installing NuGet PackageProvider"
     Write-Host "STARTING: $taskDescriptionNuget..."
-    try {
+    try
+    {
         # NuGet DLL
         $nugetDllDestinationPath = Join-Path -Path $env:ProgramFiles -ChildPath 'PackageManagement\ProviderAssemblies\nuget'
         New-Item -Path $nugetDllDestinationPath -ItemType 'Directory' -Force
@@ -28,20 +30,23 @@ if (-not (Get-PackageProvider | Where-Object Name -eq 'NuGet')) {
         New-Item -Path $nugetExeDestinationPath -ItemType 'Directory' -Force
         Copy-Item -Path 'C:\vagrant\Vagrant\Provision\DependencyManagement\nuget\nuget.exe' -Destination $nugetExeDestinationPath -Recurse -Force
     }
-    catch {
+    catch
+    {
         Write-Error "ERROR: $taskDescriptionNuget..." -ErrorAction 'Continue'
         throw $_
     }
     Write-Host "FINISHED: $taskDescriptionNuget..."
 }
-else {
+else
+{
     Write-Host "SKIPPING: NuGet PackageProvider installation as already exists."
 }
 
 
 # Map drive (done every time as there is issue with Server 2016 and persistent drives)
 Write-Verbose "`nSTARTED: Mapping PS Drive..."
-try {
+try
+{
     $newPSDriveParams = @{
         Name        = $PSDriveLetter
         PSProvider  = 'FileSystem'
@@ -55,7 +60,8 @@ try {
     New-PSDrive @newPSDriveParams
     Write-Host "`nFINISHED: Mapping PS Drive."
 }
-catch {
+catch
+{
     Write-Error "ERROR: Creating PSDrive using path [$PowershellRepositoryPath].." -ErrorAction 'Continue'
     throw $_
 }
@@ -67,16 +73,19 @@ Write-Host 'Setting up offline PSRepository and installing modules...'
 #region Register offline PowerShell repository
 $taskDescription = "Creating PSRepository [$LocalPSRepositoryName]"
 
-if (-not (Get-PSRepository -Name $LocalPSRepositoryName -ErrorAction 'SilentlyContinue')) {
+if (-not (Get-PSRepository -Name $LocalPSRepositoryName -ErrorAction 'SilentlyContinue'))
+{
 
     Write-Host "`nSTARTED: $taskDescription..."
 
-    if (-not (Test-NetConnection -ComputerName ([Uri]$PowershellRepositoryPath).Host -Port 445).TcpTestSucceeded) {
+    if (-not (Test-NetConnection -ComputerName ([Uri]$PowershellRepositoryPath).Host -Port 445).TcpTestSucceeded)
+    {
         throw "Cannot connect to [$PowerShellRepositoryPath] on port 445. Please ensure this is enabled and re-create your environment"
     }
 
     # Register the local PowerShell repository for offline builds, and set to "Trusted"
-    try {
+    try
+    {
         $repositoryParams = @{
             Name               = $LocalPSRepositoryName
             SourceLocation     = $PowershellRepositoryPath
@@ -91,7 +100,8 @@ if (-not (Get-PSRepository -Name $LocalPSRepositoryName -ErrorAction 'SilentlyCo
 
         Set-PSRepository -Name $LocalPSRepositoryName -InstallationPolicy 'Trusted'
     }
-    catch {
+    catch
+    {
         Write-Error "`nERROR: $taskDescription..." -ErrorAction 'Continue'
         throw $_
     }
@@ -99,14 +109,16 @@ if (-not (Get-PSRepository -Name $LocalPSRepositoryName -ErrorAction 'SilentlyCo
     Write-Host "`nFINISHED: $taskDescription."
 
 }
-else {
+else
+{
     Write-Host "[$LocalPSRepositoryName] already registered"
 }
 #endregion
 
 
 # Load PSDepend
-if (-not (Get-Module -Name 'PSDepend' -ListAvailable)) {
+if (-not (Get-Module -Name 'PSDepend' -ListAvailable))
+{
     Install-Module -Name 'PSDepend' -Scope 'AllUsers' -Repository $LocalPSRepositoryName -Verbose
 }
 Import-Module -Name 'PSDepend' -Verbose
