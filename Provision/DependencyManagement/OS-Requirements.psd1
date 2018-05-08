@@ -32,9 +32,9 @@
     xActiveDirectory     = '2.18.0.0'
 
     # Custom modules
-    HobScvmm             = @{
+    HobSqlServer         = @{
         DependencyType = 'FileSystem'
-        Source         = 'C:\vagrant\HobScvmm'
+        Source         = 'C:\vagrant\HobSqlServer'
         Target         = 'C:\Program Files\WindowsPowerShell\Modules'
     }
 }
