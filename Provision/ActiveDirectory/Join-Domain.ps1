@@ -19,7 +19,8 @@ Get-NetIPAddress -IPAddress "$networkAddress*" | Set-DnsClientServerAddress -Ser
 Set-DnsClientGlobalSetting -SuffixSearchList $DomainName
 
 # Join domain
-if ((Get-WmiObject win32_computersystem).partofdomain -eq $false) {
+if ((Get-WmiObject win32_computersystem).partofdomain -eq $false)
+{
     Write-Host "Joining computer to domain $DomainName"
-    Add-Computer -ComputerName 'localhost' -Credential $creds -DomainName $DomainName
+    Add-Computer -ComputerName 'localhost' -Credential $creds -DomainName $DomainName -Restart:$false
 }

@@ -8,7 +8,8 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
 # Check domain exists in case provisioner is ran again
-if (-not (Test-NetConnection -ComputerName $DomainName -WarningAction 'SilentlyContinue').PingSucceeded) {
+if (-not (Get-WmiObject win32_computersystem).partofdomain)
+{
     Install-WindowsFeature -Name AD-Domain-Services
     Import-Module ADDSDeployment
 
@@ -36,6 +37,7 @@ if (-not (Test-NetConnection -ComputerName $DomainName -WarningAction 'SilentlyC
     # Change NIC priority (metric)
     Set-NetIPInterface -InterfaceAlias 'Ethernet 2' -AddressFamily 'IPv4' -InterfaceMetric 10
 }
-else {
+else
+{
     Write-Host 'Domain exists already - skipping forest installation'
 }
