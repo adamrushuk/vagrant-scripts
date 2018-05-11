@@ -28,6 +28,7 @@
     psake                = '4.7.0'
     xDSCDiagnostics      = '2.6.0.0'
     xDSCResourceDesigner = '1.9.0.0'
+    xFailOverCluster     = '1.10.0.0'
     xWebAdministration   = '1.19.0.0'
     xActiveDirectory     = '2.18.0.0'
 
