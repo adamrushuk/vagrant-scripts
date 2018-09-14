@@ -25,7 +25,19 @@ A central repository for reusable Vagrant provisioning scripts.
 If this source repository (`adamrushuk/vagrant-scripts`) is updated, you can pull the latest changes into your "target" repo by running:  
 `git submodule update --remote --merge`
 
+### Remove this Vagrant submodule
+
+Run the commands below:
+
+```
+git submodule deinit --all
+git add .gitmodules
+git rm --cached Vagrant -r
+Remove-Item -Recurse .git/modules/Vagrant
+```
+
 ## Reference
 
 https://gist.github.com/gitaarik/8735255  
 https://stackoverflow.com/questions/5828324/update-git-submodule-to-latest-commit-on-origin/5828396#5828396
+https://blog.aevitas.co.uk/removing-a-git-submodule/
