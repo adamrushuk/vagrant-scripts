@@ -13,10 +13,10 @@ $credential = New-Object -TypeName 'PSCredential' -ArgumentList ($RepoUsername, 
 
 # Setup Nuget without an Internet Connection:
 # https://docs.microsoft.com/en-us/powershell/gallery/psget/repository/bootstrapping_nuget_proivder_and_exe#manually-bootstrapping-nugetexe-to-support-publish-operations-on-a-machine-that-is-not-connected-to-the-internet
-Write-Host "CHECKING: NuGet PackageProvider is installed..."
+Write-Host "[$($env:COMPUTERNAME)] CHECKING: NuGet PackageProvider is installed..."
 if (-not (Get-PackageProvider | Where-Object Name -eq 'NuGet'))
 {
-    $taskDescriptionNuget = "Installing NuGet PackageProvider"
+    $taskDescriptionNuget = "[$($env:COMPUTERNAME)] Installing NuGet PackageProvider"
     Write-Host "STARTING: $taskDescriptionNuget..."
     try
     {
@@ -44,7 +44,7 @@ else
 
 
 # Map drive (done every time as there is issue with Server 2016 and persistent drives)
-Write-Verbose "`nSTARTED: Mapping PS Drive..."
+Write-Verbose "`n[$($env:COMPUTERNAME)] STARTED: Mapping PS Drive..."
 try
 {
     $newPSDriveParams = @{
@@ -58,20 +58,20 @@ try
         Verbose     = $true
     }
     New-PSDrive @newPSDriveParams
-    Write-Host "`nFINISHED: Mapping PS Drive."
+    Write-Host "`n[$($env:COMPUTERNAME)] FINISHED: Mapping PS Drive."
 }
 catch
 {
-    Write-Error "ERROR: Creating PSDrive using path [$PowershellRepositoryPath].." -ErrorAction 'Continue'
+    Write-Error "[$($env:COMPUTERNAME)] ERROR: Creating PSDrive using path [$PowershellRepositoryPath].." -ErrorAction 'Continue'
     throw $_
 }
 
 
 # Set up PSGallery and install any modules
-Write-Host 'Setting up offline PSRepository and installing modules...'
+Write-Host "[$($env:COMPUTERNAME)] Setting up offline PSRepository and installing modules..."
 
 #region Register offline PowerShell repository
-$taskDescription = "Creating PSRepository [$LocalPSRepositoryName]"
+$taskDescription = "[$($env:COMPUTERNAME)] Creating PSRepository [$LocalPSRepositoryName]"
 
 if (-not (Get-PSRepository -Name $LocalPSRepositoryName -ErrorAction 'SilentlyContinue'))
 {
@@ -95,7 +95,7 @@ if (-not (Get-PSRepository -Name $LocalPSRepositoryName -ErrorAction 'SilentlyCo
             Verbose            = $true
             ErrorAction        = 'Stop'
         }
-        Write-Host "Registering PSRepository [$Name]"
+        Write-Host "[$($env:COMPUTERNAME)] Registering PSRepository [$LocalPSRepositoryName]"
         Register-PSRepository @repositoryParams
 
         Set-PSRepository -Name $LocalPSRepositoryName -InstallationPolicy 'Trusted'
@@ -111,7 +111,7 @@ if (-not (Get-PSRepository -Name $LocalPSRepositoryName -ErrorAction 'SilentlyCo
 }
 else
 {
-    Write-Host "[$LocalPSRepositoryName] already registered"
+    Write-Host "[$($env:COMPUTERNAME)] [$LocalPSRepositoryName] already registered"
 }
 #endregion
 
