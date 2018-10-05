@@ -37,5 +37,8 @@ foreach ($logName in $logNames)
 }
 
 # Create artifact folder
-Write-Host 'Creating Artifact folder'
-New-Item -Path 'C:\Artifacts' -ItemType 'Directory' -Force
+# Write-Host 'Creating Artifact folder'
+# New-Item -Path 'C:\Artifacts' -ItemType 'Directory' -Force
+
+# Fix: Enable Mapped Drives in Elevated PowerShell Sessions
+New-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System' -Name 'EnableLinkedConnections' -Value 1 -PropertyType 'DWord' -Force
